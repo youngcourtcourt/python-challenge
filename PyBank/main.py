@@ -27,6 +27,7 @@ with open(csvPath) as csvFile:
     minMonth=lines[0]
 #calculate total differences 
     differenceTotal=0
+    avgChange=0
 
 #iterate through lines in csv file
 
@@ -50,9 +51,23 @@ with open(csvPath) as csvFile:
             minMonth=lines[0]
 #initialize our previous profit/loss variable to current month for use in next loop            
         prevPL=int(lines[1])
-        
+
+avgChange=round(differenceTotal/(months-1), 2)
+print("Financial Analysis")
+print("-"*30)
 print(f"Total Months: {months}")
 print(f"Total: ${totalProfit}")
-print(f"Average Change: ${round(differenceTotal/(months-1), 2)}")
+print(f"Average Change: ${avgChange}")
 print(f"Greatest Increase in Profits: {maxMonth} (${greatestIncrease})")
 print(f"Greatest Decrease in Profits: {minMonth} (${greatestDecrease})")
+
+outputFile="outputPyBank.csv"
+#header=["Total Months", "Total", "Average Change", "Greatest Increase in Profits", "Greatest Decrease in Profits"]
+output=[[["Total Months", months], ["Total Profit", totalProfit], ["Average Change", avgChange], ["Greatest Increase in Profits", maxMonth, greatestIncrease], ["Greatest Decrease in Profits", minMonth, greatestDecrease]]
+#open output file and write rows into it
+with open (outputFile, "w", newline="") as outputFile:
+    csvWriter=csv.writer(outputFile)
+#write our headers according to the list of headers we created
+    #csvWriter.writerow(header)
+#use our ziplist as the data for the file
+    csvWriter.writerows(output)
